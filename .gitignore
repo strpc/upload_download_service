@@ -1,0 +1,8 @@
+.DS_Store
+*.zip
+**/venv/*
+**/temp/*
+**/.vscode/*
+**/.idea/*
+**/__pycache__/*
+**/*.log
