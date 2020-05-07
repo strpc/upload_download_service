@@ -1,9 +1,22 @@
 import os
+from functools import wraps
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from uuid import uuid4
+import threading
 
 from config import IP, PORT, STORAGE
 import logger
+
+
+def mult_threading(func):
+    @wraps(func)
+    def wrapper(*args_, **kwargs_):
+        func_thread = threading.Thread(target=func,
+                                       args=tuple(args_),
+                                       kwargs=kwargs_)
+        func_thread.start()
+        return func_thread
+    return wrapper
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -224,6 +237,7 @@ class Handler(BaseHTTPRequestHandler):
             )
 
 
+@mult_threading
 def run(ip='127.0.0.1', port=8000):
     server_address = (ip, port)
     httpd = ThreadingHTTPServer(server_address, Handler)
