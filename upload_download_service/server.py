@@ -76,8 +76,7 @@ class Handler(BaseHTTPRequestHandler):
                     "file": filename,
                     "message": "is ready to download"
                 }))
-                logger.do_write_log(
-                    'LOG_TYPE_INFO',
+                logger.do_write_info(
                     f'Была осуществлена проверка наличия файла {filename}',
                     'headers:',
                     *self.headers
@@ -85,8 +84,7 @@ class Handler(BaseHTTPRequestHandler):
             # если не существует, ответ "Not found", статус 400
             else:
                 self._file_not_found(filename)
-                logger.do_write_log(
-                    'LOG_TYPE_ERROR',
+                logger.do_write_error(
                     'Попытка обращения к несуществующему файлу.',
                     self.path,
                     'headers:',
@@ -106,8 +104,7 @@ class Handler(BaseHTTPRequestHandler):
                                      "application/octet-stream")
                     self.end_headers()
                     self.wfile.write(f.read())
-                logger.do_write_log(
-                    'LOG_TYPE_INFO',
+                logger.do_write_info(
                     f'Файл {filename} был загружен пользователем',
                     'headers:',
                     *self.headers
@@ -115,8 +112,7 @@ class Handler(BaseHTTPRequestHandler):
             # если не существует, ответ "Not found",
             else:
                 self._file_not_found(filename)
-                logger.do_write_log(
-                    'LOG_TYPE_ERROR',
+                logger.do_write_error(
                     'Отсутствует файл для отправки. {filename}.',
                     'headers:',
                     *self.headers
@@ -130,8 +126,7 @@ class Handler(BaseHTTPRequestHandler):
                 'status': 404,
                 'message': 'page not found'
             }))
-            logger.do_write_log(
-                'LOG_TYPE_ERROR',
+            logger.do_write_error(
                 f'Переход на некорректный адрес. {self.path} headers:',
                 *self.headers
             )
@@ -147,8 +142,7 @@ class Handler(BaseHTTPRequestHandler):
                 'status': 403,
                 'message': 'headers not found'
             }))
-            logger.do_write_log(
-                'LOG_TYPE_ERROR',
+            logger.do_write_error(
                 'Попытка обращения к несуществующему адресу. headers:',
                 *self.headers
             )
@@ -184,8 +178,7 @@ class Handler(BaseHTTPRequestHandler):
                             'link for check': f"{IP}:{PORT}/check/{filename}",
                             'link for download': f"{IP}:{PORT}/download/{filename}",
                         }))
-                    logger.do_write_log(
-                        'LOG_TYPE_INFO',
+                    logger.do_write_info(
                         f'Файл {filename} был загружен в директорию /{STORAGE}/'
                     )
                 except Exception as error:
@@ -197,8 +190,7 @@ class Handler(BaseHTTPRequestHandler):
                             'status': 403,
                             'error': 'file is not uploaded',
                         }))
-                    logger.do_write_log(
-                        'LOG_TYPE_ERROR',
+                    logger.do_write_error(
                         'Произошла ошибка при получении файла.',
                         error,
                         self.path,
@@ -215,8 +207,7 @@ class Handler(BaseHTTPRequestHandler):
                         'status': 409,
                         'error': 'file not attached',
                     }))
-                logger.do_write_log(
-                    'LOG_TYPE_ERROR',
+                logger.do_write_error(
                     f'Отсутствует файл для загрузки. {self.path}. headers:',
                     *self.headers
                 )
@@ -229,8 +220,7 @@ class Handler(BaseHTTPRequestHandler):
                 'status': 404,
                 'message': 'page not found'
             }))
-            logger.do_write_log(
-                'LOG_TYPE_ERROR',
+            logger.do_write_error(
                 f'Попытка обращения к несуществующему адресу. {self.path}.'
                 'headers:',
                 *self.headers
